@@ -1,0 +1,38 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: elasticsearch-api
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+    url: jdbc:mysql://127.0.0.1:3306/es_test?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
+mybatis-plus:
+  mapper-locations: mapper/*.xml #这个配置是用来连接mapper接口和mapper配置类的
+  configuration:
+    map-underscore-to-camel-case: true #驼峰转换
+  type-aliases-package: com.lq.entity #实体类扫描包
+
+
+# es集群名称
+elasticsearch.clusterName: single-node-cluster
+#es用户名
+elasticsearch.userName: elastic
+#es密码
+elasticsearch.password: elastic
+# es host ip 地址(集群)：本次使用的是单机模式
+elasticsearch.hosts: 127.0.0.1:9200
+# es 请求方式
+elasticsearch.scheme: http
+# es 连接超时时间
+elasticsearch.connectTimeOut: 1000
+# es socket 连接超时时间
+elasticsearch.socketTimeOut: 30000
+# es 请求超时时间
+elasticsearch.connectionRequestTimeOut: 500
+# es 最大连接数
+elasticsearch.maxConnectNum: 100
+# es 每个路由的最大连接数
+elasticsearch.maxConnectNumPerRoute: 100
