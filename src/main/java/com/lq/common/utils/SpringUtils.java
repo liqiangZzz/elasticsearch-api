@@ -1,8 +1,3 @@
-/**
- * Copyright (c) 2005-2012 https://github.com/zhangkaitao
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- */
 package com.lq.common.utils;
 
 import org.springframework.beans.BeansException;
@@ -13,8 +8,13 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.Assert;
 
 /**
- * @author Jie Wu <wujie18@centaline.com.cn>
- */
+ * @program: elasticsearch-api
+ * @pageName com.lq.common.utils
+ * @className SpringUtils
+ * @description:
+ * @author: liqiang
+ * @create: 2023-10-13 14:24
+ **/
 public final class SpringUtils implements ApplicationContextAware, DisposableBean {
 
     private static ApplicationContext applicationContext;
@@ -65,7 +65,7 @@ public final class SpringUtils implements ApplicationContextAware, DisposableBea
      */
     public static <T> T getBean(Class<T> clz) throws BeansException {
         Assert.notNull(clz,"不能为空");
-        return (T) applicationContext.getBean(clz);
+        return applicationContext.getBean(clz);
     }
     
     public static <T> T getBean(String name, Class<T> type){
