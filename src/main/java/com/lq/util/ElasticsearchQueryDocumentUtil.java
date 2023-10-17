@@ -3,6 +3,7 @@ package com.lq.util;
 import cn.hutool.core.map.MapUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.lq.common.exception.BusinessException;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.action.search.SearchRequest;
@@ -58,7 +59,7 @@ public class ElasticsearchQueryDocumentUtil {
     public <T> List<T> search(SearchSourceBuilder searchSourceBuilder, Class<T> s) throws Exception {
         Document declaredAnnotation = s.getDeclaredAnnotation(Document.class);
         if (declaredAnnotation == null) {
-            throw new Exception(String.format("class name: %s can not find Annotation [Document], please check", s.getName()));
+            throw new BusinessException(String.format("class name: %s can not find Annotation [Document], please check", s.getName()));
         }
         String indexName = declaredAnnotation.indexName();
         SearchRequest searchRequest = new SearchRequest(indexName);
@@ -92,7 +93,7 @@ public class ElasticsearchQueryDocumentUtil {
     public <T> List<T> searchHighlightData(SearchSourceBuilder searchSourceBuilder, Class<T> beanClass, String[] highFields) throws Exception {
         Document declaredAnnotation = beanClass.getDeclaredAnnotation(Document.class);
         if (declaredAnnotation == null) {
-            throw new Exception(String.format("class name: %s can not find Annotation [Document], please check", beanClass.getName()));
+            throw new BusinessException(String.format("class name: %s can not find Annotation [Document], please check", beanClass.getName()));
         }
         String indexName = declaredAnnotation.indexName();
         SearchRequest searchRequest = new SearchRequest(indexName);
@@ -133,7 +134,7 @@ public class ElasticsearchQueryDocumentUtil {
      * 查询并分页
      *
      * @param index          索引名称
-     * @param query          查询条件
+     * @param builder        查询条件
      * @param size           文档大小限制
      * @param from           从第几页开始
      * @param fields         需要显示的字段，逗号分隔（缺省为全部字段）
@@ -143,14 +144,13 @@ public class ElasticsearchQueryDocumentUtil {
      */
     public <T> List<T> searchListData(Class<T> beanClass,
                                       String index,
-                                      SearchSourceBuilder query,
+                                      SearchSourceBuilder builder,
                                       Integer size,
                                       Integer from,
                                       String fields,
                                       String sortField,
                                       String[] highlightField) throws IOException, InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         SearchRequest request = new SearchRequest(index);
-        SearchSourceBuilder builder = query;
         if (StringUtils.isNotBlank(fields)) {
             //只查询特定字段。如果需要查询所有字段则不设置该项。
             builder.fetchSource(new FetchSourceContext(true, fields.split(","), Strings.EMPTY_ARRAY));
@@ -161,7 +161,7 @@ public class ElasticsearchQueryDocumentUtil {
         builder.size(size);
 
         if (StringUtils.isNotBlank(sortField)) {
-            //排序字段，注意如果proposal_no是 text类型会默认带有keyword性质，需要拼接.keyword
+            //排序字段，注意如果 proposal_no 是 text类型会默认带有keyword性质，需要拼接.keyword
             builder.sort(sortField, SortOrder.ASC);
         }
         //高亮

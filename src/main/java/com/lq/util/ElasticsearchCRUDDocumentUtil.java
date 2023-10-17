@@ -1,6 +1,7 @@
 package com.lq.util;
 
 import com.alibaba.fastjson.JSON;
+import com.lq.common.exception.BusinessException;
 import org.elasticsearch.action.ActionListener;
 import org.elasticsearch.action.DocWriteResponse;
 import org.elasticsearch.action.bulk.BulkItemResponse;
@@ -43,7 +44,7 @@ public class ElasticsearchCRUDDocumentUtil {
     public IndexResponse index(Object o) throws Exception {
         Document declaredAnnotation = o.getClass().getDeclaredAnnotation(Document.class);
         if (declaredAnnotation == null) {
-            throw new Exception(String.format("class name: %s can not find Annotation [Document], please check", o.getClass().getName()));
+            throw new BusinessException(String.format("class name: %s can not find Annotation [Document], please check", o.getClass().getName()));
         }
         String indexName = declaredAnnotation.indexName();
 
@@ -172,7 +173,7 @@ public class ElasticsearchCRUDDocumentUtil {
         Object o1 = list.get(0);
         Document declaredAnnotation = o1.getClass().getDeclaredAnnotation(Document.class);
         if (declaredAnnotation == null) {
-            throw new Exception(String.format("class name: %s can not find Annotation [@Document], please check", o1.getClass().getName()));
+            throw new BusinessException(String.format("class name: %s can not find Annotation [@Document], please check", o1.getClass().getName()));
         }
         String indexName = declaredAnnotation.indexName();
 

@@ -45,9 +45,4 @@ public class ElasticsearchController {
         return null;
     }
 
-    @SneakyThrows
-    @RequestMapping("/create-index")
-    public String createIndex() {
-        return "创建成功";
-    }
 }
