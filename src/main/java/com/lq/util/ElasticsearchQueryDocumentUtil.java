@@ -122,7 +122,7 @@ public class ElasticsearchQueryDocumentUtil {
         searchRequest.scroll(TimeValue.timeValueMinutes(1L));
 
         SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
-        if (searchResponse.status().getStatus() == 200) {
+        if (RestStatus.OK.equals(searchResponse.status())) {
             // 解析对象
             return setSearchResponse(searchResponse, beanClass);
         }
@@ -180,7 +180,7 @@ public class ElasticsearchQueryDocumentUtil {
         //builder.fetchSource(false);
         request.source(builder);
         SearchResponse response = restHighLevelClient.search(request, RequestOptions.DEFAULT);
-        if (response.status().getStatus() == 200) {
+        if (RestStatus.OK.equals(response.status())) {
             // 解析对象
             return setSearchResponse(response, beanClass);
         }
