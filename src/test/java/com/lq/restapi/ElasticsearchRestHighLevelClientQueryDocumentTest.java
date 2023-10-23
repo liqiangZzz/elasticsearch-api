@@ -3,6 +3,7 @@ package com.lq.restapi;
 import cn.hutool.core.map.MapUtil;
 import com.alibaba.fastjson.JSON;
 import com.lq.entity.Goods;
+import com.lq.entity.Product;
 import com.lq.util.ElasticsearchClientUtil;
 import org.apache.commons.lang.ArrayUtils;
 import org.elasticsearch.action.search.*;
@@ -322,8 +323,8 @@ class ElasticsearchRestHighLevelClientQueryDocumentTest {
         searchSourceBuilder.fetchSource(includes, excludes);
 
         //执行查询
-        this.queryEsHighlightData(INDEX_NAME, Goods.class, list, searchSourceBuilder,new String[]{"categoryName","brandName"});
-        this.queryEsHighlightData(INDEX_NAME, Goods.class, list, searchSourceBuilder,new String[]{});
+        this.queryEsHighlightData(INDEX_NAME, Goods.class, list, searchSourceBuilder, new String[]{"categoryName", "brandName"});
+        this.queryEsHighlightData(INDEX_NAME, Goods.class, list, searchSourceBuilder, new String[]{});
     }
 
 
@@ -642,6 +643,51 @@ class ElasticsearchRestHighLevelClientQueryDocumentTest {
             Goods goods = JSON.parseObject(hit.getSourceAsString(), Goods.class);
             // 输出查询信息
             System.out.println(goods.toString());
+        }
+    }
+
+    /**
+     * 不支持向前搜索,每次只能向后搜索1页数据
+     * @throws IOException
+     */
+    @Test
+    void testSearchAfterQuery() throws IOException {
+
+        int pageSize = 2;
+        String indexName = "product";
+        String price = "price";
+        String id = "_id";
+        // 定义请求对象
+        SearchRequest searchRequest = new SearchRequest(indexName);
+        // 构建查询条件
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchRequest.source(searchSourceBuilder.query(QueryBuilders.matchAllQuery()).sort(price, SortOrder.ASC).sort(id, SortOrder.ASC));
+        SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+        System.out.println(searchResponse.toString());
+        System.out.println(searchSourceBuilder.query());
+
+        SearchHits hits = searchResponse.getHits();
+        for (SearchHit hit : hits) {
+            // 将 JSON 转换成对象
+            Product product = JSON.parseObject(hit.getSourceAsString(), Product.class);
+            // 输出查询信息
+            System.out.println(product.toString());
+        }
+
+        SearchRequest searchRequest2 = new SearchRequest(indexName);
+        // 构建查询条件
+        SearchSourceBuilder searchSourceBuilder2 = new SearchSourceBuilder();
+        searchRequest2.source(searchSourceBuilder2.query(QueryBuilders.matchAllQuery()).size(pageSize).sort(price, SortOrder.ASC).sort(id, SortOrder.ASC).searchAfter(new Object[]{999, "4"}));
+        SearchResponse searchResponse2 = restHighLevelClient.search(searchRequest2, RequestOptions.DEFAULT);
+        System.out.println(searchResponse2.toString());
+        System.out.println(searchSourceBuilder2.query());
+
+        SearchHits hits2 = searchResponse2.getHits();
+        for (SearchHit hit : hits2) {
+            // 将 JSON 转换成对象
+            Product product = JSON.parseObject(hit.getSourceAsString(), Product.class);
+            // 输出查询信息
+            System.out.println(product.toString());
         }
     }
 
