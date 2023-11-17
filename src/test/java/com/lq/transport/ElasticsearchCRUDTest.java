@@ -1,8 +1,8 @@
 package com.lq.transport;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.lq.entity.Product;
-import com.lq.mapper.ProductMapper;
+import com.lq.entity.MyProduct;
+import com.lq.mapper.MyProductMapper;
 import com.lq.util.ElasticsearchClientUtil;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
@@ -36,7 +36,7 @@ import java.util.concurrent.ExecutionException;
 class ElasticsearchCRUDTest {
 
     @Autowired
-    private ProductMapper productMapper;
+    private MyProductMapper myProductMapper;
 
     private static final String INDEX = "my_product";
 
@@ -44,7 +44,7 @@ class ElasticsearchCRUDTest {
 
     @Test
     void testQuery() {
-        System.out.println(productMapper.selectList(new LambdaQueryWrapper<>()));
+        System.out.println(myProductMapper.selectList(new LambdaQueryWrapper<>()));
     }
 
     @Test
@@ -59,11 +59,12 @@ class ElasticsearchCRUDTest {
     void testIndex() throws IOException {
         // 获取 Client连接对象
         TransportClient client = ElasticsearchClientUtil.getConnection();
-        List<Product> productList = productMapper.selectList(new LambdaQueryWrapper<>());
-        for (Product product : productList) {
+        List<MyProduct> myProductList = myProductMapper.selectList(new LambdaQueryWrapper<>());
+        for (MyProduct product : myProductList) {
             IndexResponse indexResponse = client.prepareIndex(INDEX, DOC, product.getId().toString())
                     .setSource(XContentFactory.jsonBuilder()
                             .startObject()
+                            .field("id", product.getId())
                             .field("name", product.getName())
                             .field("type", product.getType())
                             .field("price", product.getPrice())
@@ -84,6 +85,7 @@ class ElasticsearchCRUDTest {
         IndexResponse indexResponse = client.prepareIndex(INDEX, DOC, String.valueOf(5))
                 .setSource(XContentFactory.jsonBuilder()
                         .startObject()
+                        .field("id", 5)
                         .field("name", "苹果手机")
                         .field("type", "Phone")
                         .field("price", 8999)
@@ -130,7 +132,7 @@ class ElasticsearchCRUDTest {
         UpdateRequest updateRequest = new UpdateRequest(INDEX, DOC, String.valueOf(4))
                 .doc(XContentFactory.jsonBuilder()
                         .startObject()
-                        .field("name", "磨砂壳")
+                        .field("name", "苹果磨砂手机")
                         .endObject())
                 .upsert(indexRequest);
 
@@ -155,9 +157,10 @@ class ElasticsearchCRUDTest {
         TransportClient client = ElasticsearchClientUtil.getConnection();
         BulkRequestBuilder bulkRequestBuilder = client.prepareBulk();
 
-        IndexRequest indexRequest = new IndexRequest(INDEX, DOC, String.valueOf(5))
+        IndexRequest indexRequest = new IndexRequest(INDEX, DOC, String.valueOf(6))
                 .source(XContentFactory.jsonBuilder()
                         .startObject()
+                        .field("id", 6)
                         .field("name", "HP电脑")
                         .field("type", "电脑")
                         .field("price", 6999)
@@ -165,9 +168,10 @@ class ElasticsearchCRUDTest {
                         .field("create_time", LocalDateTime.now())
                         .endObject());
 
-        IndexRequest indexRequest2 = new IndexRequest(INDEX, DOC, String.valueOf(6))
+        IndexRequest indexRequest2 = new IndexRequest(INDEX, DOC, String.valueOf(7))
                 .source(XContentFactory.jsonBuilder()
                         .startObject()
+                        .field("id", 7)
                         .field("name", "联想电脑")
                         .field("type", "电脑")
                         .field("price", 7999)
