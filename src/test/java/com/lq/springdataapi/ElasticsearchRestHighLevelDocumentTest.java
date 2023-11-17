@@ -1,4 +1,4 @@
-package com.lq.dataapi;
+package com.lq.springdataapi;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.lq.entity.Goods;
@@ -19,7 +19,7 @@ import java.util.Map;
  * @program: elasticsearch-api
  * @pageName com.lq.dataapi
  * @className ElasticsearchRestHighLevelDocumentTest
- * @description:
+ * @description:spring data Elasticsearch Rest 操作文档
  * @author: liqiang
  * @create: 2023-10-12 15:02
  **/
@@ -123,7 +123,7 @@ public class ElasticsearchRestHighLevelDocumentTest {
         goodsList.add(goods);
         goodsList.add(goods2);
         goodsList.add(goods3);
-        System.out.println(elasticsearchCRUDDocumentUtil.batchSaveOrUpdate(goodsList,true));
+        System.out.println(elasticsearchCRUDDocumentUtil.batchSaveOrUpdate(goodsList, true));
     }
 
     @Test

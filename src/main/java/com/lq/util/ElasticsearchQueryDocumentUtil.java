@@ -36,7 +36,7 @@ import java.util.Map;
  * @program: elasticsearch-api
  * @pageName com.lq.util
  * @className ElasticsearchQueryDocumentUtil
- * @description: 查询文档
+ * @description: spring data Elasticsearch Rest 查询文档
  * @author: liqiang
  * @create: 2023-10-13 11:26
  **/

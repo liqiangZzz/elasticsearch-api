@@ -31,7 +31,7 @@ import java.util.Map;
  * @program: elasticsearch-api
  * @pageName com.lq.util
  * @className ElasticsearchCRUDDocumentUtil
- * @description:
+ * @description: spring data Elasticsearch Rest 操作文档
  * @author: liqiang
  * @create: 2023-10-13 10:43
  **/

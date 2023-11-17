@@ -1,8 +1,7 @@
-package com.lq.dataapi;
+package com.lq.springdataapi;
 
 import com.lq.entity.Goods;
 import com.lq.util.ElasticsearchQueryDocumentUtil;
-import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -18,18 +17,15 @@ import java.util.*;
  * @program: elasticsearch-api
  * @pageName com.lq.dataapi
  * @className ElasticsearchRestHighLevelQueryDocumentTest
- * @description:
+ * @description: spring data Elasticsearch Rest 查询文档
  * @author: liqiang
  * @create: 2023-10-13 11:28
  **/
 @SpringBootTest
 public class ElasticsearchRestHighLevelQueryDocumentTest {
 
-
     @Autowired
     private ElasticsearchQueryDocumentUtil elasticsearchQueryDocumentUtil;
-    @Autowired
-    private RestHighLevelClient restHighLevelClient;
 
     /**
      * 精准查询
@@ -89,6 +85,7 @@ public class ElasticsearchRestHighLevelQueryDocumentTest {
 
     /**
      * 查询结果 高亮显示
+     *
      * @throws Exception
      */
     @Test
@@ -119,8 +116,8 @@ public class ElasticsearchRestHighLevelQueryDocumentTest {
     }
 
     /**
-     *
      * 查询并分页
+     *
      * @throws Exception
      */
     @Test
@@ -147,9 +144,8 @@ public class ElasticsearchRestHighLevelQueryDocumentTest {
         String[] excludes = {};
         searchSourceBuilder.fetchSource(includes, excludes);
         //执行查询
-        System.out.println(elasticsearchQueryDocumentUtil.searchListData(Goods.class,"goods",searchSourceBuilder,1,0,null,null,new String[]{"categoryName","brandName"}));
+        System.out.println(elasticsearchQueryDocumentUtil.searchListData(Goods.class, "goods", searchSourceBuilder, 1, 0, null, null, new String[]{"categoryName", "brandName"}));
     }
-
 
 
 }
