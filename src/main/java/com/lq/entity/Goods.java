@@ -9,14 +9,13 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
  * @program: elasticsearch-api
  * @pageName com.lq.entity
  * @className Goods
- * @description:
+ * @description:  spring data elasticsearch 自动映射索引
  * @author: liqiang
  * @create: 2023-10-09 13:59
  **/
