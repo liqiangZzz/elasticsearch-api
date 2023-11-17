@@ -88,7 +88,6 @@
 			<version>7.12.1</version>
 		</dependency>
 
-
 		<!--引入es-high-level-client相关依赖  start-->
 		<dependency>
 			<groupId>org.elasticsearch</groupId>
@@ -105,12 +104,6 @@
 			<groupId>org.elasticsearch.client</groupId>
 			<artifactId>elasticsearch-rest-high-level-client</artifactId>
 			<version>7.12.1</version>
-		</dependency>
-
-		<!--引入starter-data-elasticsearc 相关依赖-->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-elasticsearch</artifactId>
 		</dependency>
 
 		<!--引入es-high-level-client相关依赖  end-->
@@ -143,6 +136,12 @@
 			<groupId>org.reflections</groupId>
 			<artifactId>reflections</artifactId>
 			<version>0.9.11</version>
+		</dependency>
+
+		<!--引入starter-data-elasticsearc 相关依赖-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-elasticsearch</artifactId>
 		</dependency>
 
 	</dependencies>
