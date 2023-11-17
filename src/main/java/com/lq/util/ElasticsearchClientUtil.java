@@ -1,8 +1,5 @@
 package com.lq.util;
 
-import org.apache.http.HttpHost;
-import org.elasticsearch.client.RestClient;
-import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.TransportAddress;
@@ -15,7 +12,7 @@ import java.net.UnknownHostException;
  * @program: elasticsearch-api
  * @pageName com.lq.util
  * @className ElasticsearchClientUtil
- * @description:
+ * @description:链接配置信息
  * @author: liqiang
  * @create: 2023-09-27 14:51
  **/
@@ -36,18 +33,5 @@ public class ElasticsearchClientUtil {
         return new PreBuiltTransportClient(settings).addTransportAddress(transportAddress);
     }
 
-    /**
-     * java  rest api  RestHighLevelClient 链接信息
-     * @return
-     * @throws UnknownHostException
-     */
-    public static RestHighLevelClient getRestHighLevelClientConnection() {
-        // 创建Client连接对象(指定集群名称)
-        return  new RestHighLevelClient(
-                RestClient.builder(
-                        new HttpHost("localhost", 9200, "http")
-                )
-        );
-    }
 
 }
