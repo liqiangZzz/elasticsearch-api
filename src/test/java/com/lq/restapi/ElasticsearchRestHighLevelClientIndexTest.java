@@ -1,6 +1,5 @@
 package com.lq.restapi;
 
-import com.lq.util.ElasticsearchClientUtil;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.client.IndicesClient;
@@ -13,33 +12,27 @@ import org.elasticsearch.client.indices.GetIndexResponse;
 import org.elasticsearch.cluster.metadata.MappingMetadata;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.Map;
 
 /**
  * @program: elasticsearch-api
  * @pageName com.lq
  * @className ElasticsearchRestHighLevelClientIndexTest
- * @description: Elasticsearch Rest高级客户端索引测试
+ * @description: Elasticsearch Rest 高级客户端索引测试
  * @author: liqiang
  * @create: 2023-10-09 11:17
  **/
 @SpringBootTest
 class ElasticsearchRestHighLevelClientIndexTest {
 
-    private final static String INDEX_NAME = "goods";
+    private final static String INDEX_NAME = "product";
 
-    /**
-     * 启动时加载
-     */
-    private static RestHighLevelClient restHighLevelClient = null;
-
-    static {
-        restHighLevelClient = ElasticsearchClientUtil.getRestHighLevelClientConnection();
-    }
+    @Autowired
+    private  RestHighLevelClient restHighLevelClient ;
 
     @Test
     void testClient() {

@@ -2,9 +2,7 @@ package com.lq.restapi;
 
 import cn.hutool.core.map.MapUtil;
 import com.alibaba.fastjson.JSON;
-import com.lq.entity.Goods;
 import com.lq.entity.Product;
-import com.lq.util.ElasticsearchClientUtil;
 import org.apache.commons.lang.ArrayUtils;
 import org.elasticsearch.action.search.*;
 import org.elasticsearch.client.RequestOptions;
@@ -30,19 +28,19 @@ import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.elasticsearch.search.sort.SortOrder;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.UnknownHostException;
 import java.util.*;
 
 /**
  * @program: elasticsearch-api
  * @pageName com.lq
  * @className ElasticsearchRestHighLevelClientQueryDocumentTest
- * @description:
+ * @description: Elasticsearch Rest高级客户端
  * @author: liqiang
  * @create: 2023-10-09 15:07
  **/
@@ -50,16 +48,10 @@ import java.util.*;
 class ElasticsearchRestHighLevelClientQueryDocumentTest {
 
 
-    /**
-     * 启动时加载
-     */
-    private static RestHighLevelClient restHighLevelClient = null;
+    @Autowired
+    private  RestHighLevelClient restHighLevelClient ;
 
-    static {
-        restHighLevelClient = ElasticsearchClientUtil.getRestHighLevelClientConnection();
-    }
-
-    private final static String INDEX_NAME = "goods";
+    private final static String INDEX_NAME = "product";
 
 
     /**
@@ -84,7 +76,7 @@ class ElasticsearchRestHighLevelClientQueryDocumentTest {
             SearchHits hits = searchResponse.getHits();
             for (SearchHit hit : hits) {
                 // 将 JSON 转换成对象
-                //Goods userInfo = JSON.parseObject(hit.getSourceAsString(), Goods.class);
+                //Product userInfo = JSON.parseObject(hit.getSourceAsString(), Product.class);
                 // 将 JSON 转换成对象
                 T bean = JSON.parseObject(hit.getSourceAsString(), beanClass);
                 list.add(bean);
@@ -108,12 +100,12 @@ class ElasticsearchRestHighLevelClientQueryDocumentTest {
      */
     @Test
     void testTermQuery() throws IOException {
-        ArrayList<Goods> list = new ArrayList<>();
+        ArrayList<Product> list = new ArrayList<>();
         // 构建查询条件（注意：termQuery 支持多种格式查询，如 boolean、int、double、string 等，这里使用的是 string 的查询）
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.termQuery("brandName", "华为"));
         //执行查询
-        this.queryEsData(INDEX_NAME, Goods.class, list, searchSourceBuilder);
+        this.queryEsData(INDEX_NAME, Product.class, list, searchSourceBuilder);
     }
 
     /**
@@ -123,13 +115,13 @@ class ElasticsearchRestHighLevelClientQueryDocumentTest {
      */
     @Test
     void testTermsQuery() throws IOException {
-        ArrayList<Goods> list = new ArrayList<>();
+        ArrayList<Product> list = new ArrayList<>();
         // 构建查询条件（注意：termQuery 支持多种格式查询，如 boolean、int、double、string 等，这里使用的是 string 的查询）
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         String[] args = {"华为", "Apple"};
         searchSourceBuilder.query(QueryBuilders.termsQuery("brandName", args));
         //执行查询
-        this.queryEsData(INDEX_NAME, Goods.class, list, searchSourceBuilder);
+        this.queryEsData(INDEX_NAME, Product.class, list, searchSourceBuilder);
     }
 
     /**
@@ -145,7 +137,7 @@ class ElasticsearchRestHighLevelClientQueryDocumentTest {
      */
     @Test
     void testMatchAllQuery() throws IOException {
-        ArrayList<Goods> list = new ArrayList<>();
+        ArrayList<Product> list = new ArrayList<>();
         // 创建查询源构造器
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         // 构建查询条件
@@ -164,7 +156,7 @@ class ElasticsearchRestHighLevelClientQueryDocumentTest {
             searchSourceBuilder.sort(order, sort);
         }
         //执行查询
-        this.queryEsData(INDEX_NAME, Goods.class, list, searchSourceBuilder);
+        this.queryEsData(INDEX_NAME, Product.class, list, searchSourceBuilder);
     }
 
     /**
@@ -174,7 +166,7 @@ class ElasticsearchRestHighLevelClientQueryDocumentTest {
      */
     @Test
     void testMatchQuery() throws IOException {
-        ArrayList<Goods> list = new ArrayList<>();
+        ArrayList<Product> list = new ArrayList<>();
         // 创建查询源构造器
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         // 构建查询条件
@@ -190,7 +182,7 @@ class ElasticsearchRestHighLevelClientQueryDocumentTest {
             searchSourceBuilder.sort(order, sort);
         }
         //执行查询
-        this.queryEsData(INDEX_NAME, Goods.class, list, searchSourceBuilder);
+        this.queryEsData(INDEX_NAME, Product.class, list, searchSourceBuilder);
     }
 
     /**
@@ -200,13 +192,13 @@ class ElasticsearchRestHighLevelClientQueryDocumentTest {
      */
     @Test
     void testMatchPhraseQuery() throws IOException {
-        ArrayList<Goods> list = new ArrayList<>();
+        ArrayList<Product> list = new ArrayList<>();
         // 创建查询源构造器
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         // 构建查询条件
         searchSourceBuilder.query(QueryBuilders.matchPhraseQuery("title", "256GB"));
         //执行查询
-        this.queryEsData(INDEX_NAME, Goods.class, list, searchSourceBuilder);
+        this.queryEsData(INDEX_NAME, Product.class, list, searchSourceBuilder);
     }
 
     /**
@@ -216,13 +208,13 @@ class ElasticsearchRestHighLevelClientQueryDocumentTest {
      */
     @Test
     void testMatchPhrasePrefixQuery() throws IOException {
-        ArrayList<Goods> list = new ArrayList<>();
+        ArrayList<Product> list = new ArrayList<>();
         // 创建查询源构造器
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         // 构建查询条件
         searchSourceBuilder.query(QueryBuilders.matchBoolPrefixQuery("title", "华为"));
         //执行查询
-        this.queryEsData(INDEX_NAME, Goods.class, list, searchSourceBuilder);
+        this.queryEsData(INDEX_NAME, Product.class, list, searchSourceBuilder);
     }
 
     /**
@@ -232,7 +224,7 @@ class ElasticsearchRestHighLevelClientQueryDocumentTest {
      */
     @Test
     void testMatchMultiQuery() throws IOException {
-        ArrayList<Goods> list = new ArrayList<>();
+        ArrayList<Product> list = new ArrayList<>();
         // 创建查询源构造器
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         // 构建查询条件
@@ -241,7 +233,7 @@ class ElasticsearchRestHighLevelClientQueryDocumentTest {
 
         searchSourceBuilder.query(QueryBuilders.multiMatchQuery("手机", fields));
         //执行查询
-        this.queryEsData(INDEX_NAME, Goods.class, list, searchSourceBuilder);
+        this.queryEsData(INDEX_NAME, Product.class, list, searchSourceBuilder);
     }
 
     /**
@@ -252,24 +244,24 @@ class ElasticsearchRestHighLevelClientQueryDocumentTest {
      */
     @Test
     void testWildcardQuery() throws IOException {
-        ArrayList<Goods> list = new ArrayList<>();
+        ArrayList<Product> list = new ArrayList<>();
         // 创建查询源构造器
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
         searchSourceBuilder.query(QueryBuilders.wildcardQuery("brandName", "*为"));
         //执行查询
-        this.queryEsData(INDEX_NAME, Goods.class, list, searchSourceBuilder);
+        this.queryEsData(INDEX_NAME, Product.class, list, searchSourceBuilder);
     }
 
     @Test
     void testFuzzyQuery() throws IOException {
-        ArrayList<Goods> list = new ArrayList<>();
+        ArrayList<Product> list = new ArrayList<>();
         // 创建查询源构造器
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         //fuzziness允许的编辑距离，写错两个字符，设置可以编辑两步  Apple bpale
         searchSourceBuilder.query(QueryBuilders.fuzzyQuery("brandName", "bpale").fuzziness(Fuzziness.TWO));
         //执行查询
-        this.queryEsData(INDEX_NAME, Goods.class, list, searchSourceBuilder);
+        this.queryEsData(INDEX_NAME, Product.class, list, searchSourceBuilder);
     }
 
     /**
@@ -279,12 +271,12 @@ class ElasticsearchRestHighLevelClientQueryDocumentTest {
      */
     @Test
     void testRegexpQuery() throws IOException {
-        ArrayList<Goods> list = new ArrayList<>();
+        ArrayList<Product> list = new ArrayList<>();
         // 创建查询源构造器
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.regexpQuery("brandName", "[^\u4E00-\u9FA5]+"));
         //执行查询
-        this.queryEsData(INDEX_NAME, Goods.class, list, searchSourceBuilder);
+        this.queryEsData(INDEX_NAME, Product.class, list, searchSourceBuilder);
     }
 
     /**
@@ -299,7 +291,7 @@ class ElasticsearchRestHighLevelClientQueryDocumentTest {
      */
     @Test
     void testBoolQuery() throws IOException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
-        ArrayList<Goods> list = new ArrayList<>();
+        ArrayList<Product> list = new ArrayList<>();
         // 创建查询源构造器
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
@@ -323,8 +315,8 @@ class ElasticsearchRestHighLevelClientQueryDocumentTest {
         searchSourceBuilder.fetchSource(includes, excludes);
 
         //执行查询
-        this.queryEsHighlightData(INDEX_NAME, Goods.class, list, searchSourceBuilder, new String[]{"categoryName", "brandName"});
-        this.queryEsHighlightData(INDEX_NAME, Goods.class, list, searchSourceBuilder, new String[]{});
+        this.queryEsHighlightData(INDEX_NAME, Product.class, list, searchSourceBuilder, new String[]{"categoryName", "brandName"});
+        //this.queryEsHighlightData(INDEX_NAME, Product.class, list, searchSourceBuilder, new String[]{});
     }
 
 
@@ -368,7 +360,7 @@ class ElasticsearchRestHighLevelClientQueryDocumentTest {
             SearchHits hits = searchResponse.getHits();
             for (SearchHit hit : hits) {
                 // 将 JSON 转换成对象
-                //Goods userInfo = JSON.parseObject(hit.getSourceAsString(), Goods.class);
+                //Product userInfo = JSON.parseObject(hit.getSourceAsString(), Product.class);
                 // 将 JSON 转换成对象
                 T bean = JSON.parseObject(hit.getSourceAsString(), beanClass);
                 System.out.println(hit.getSourceAsMap());
@@ -640,9 +632,9 @@ class ElasticsearchRestHighLevelClientQueryDocumentTest {
         SearchHits hits = scrollResponse.getHits();
         for (SearchHit hit : hits) {
             // 将 JSON 转换成对象
-            Goods goods = JSON.parseObject(hit.getSourceAsString(), Goods.class);
+            Product Product = JSON.parseObject(hit.getSourceAsString(), Product.class);
             // 输出查询信息
-            System.out.println(goods.toString());
+            System.out.println(Product.toString());
         }
     }
 
