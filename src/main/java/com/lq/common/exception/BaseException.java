@@ -1,9 +1,9 @@
 package com.lq.common.exception;
 
 import com.lq.common.utils.MessageUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 
 /**
  * @program: elasticsearch-api
@@ -15,7 +15,7 @@ import org.springframework.util.StringUtils;
  **/
 public class BaseException extends RuntimeException {
 
-    protected Logger logger = LoggerFactory.getLogger(this.getClass());
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * @Fields serialVersionUID
@@ -25,24 +25,25 @@ public class BaseException extends RuntimeException {
     /**
      * 异常代码
      */
-    private String code;
+    private final String code;
 
     /**
      * 错误码对应的参数
      */
-    private Object[] args;
+    private final Object[] args;
 
     /**
      * 错误消息
      */
-    private String defaultMessage;
+    private final String defaultMessage;
 
     /**
      * 构造基础异常
-     * @param code 异常代码
-     * @param args 异常参数
+     *
+     * @param code           异常代码
      * @param defaultMessage 默认异常消息
-     * @param cause 引起此异常的触发异常
+     * @param cause          引起此异常的触发异常
+     * @paramargs args           异常参数
      */
     public BaseException(String code, Object[] args, String defaultMessage, Throwable cause) {
         super(cause);
@@ -54,18 +55,20 @@ public class BaseException extends RuntimeException {
 
     /**
      * 构造基础异常
-     * @param code 异常代码
-     * @param args 异常参数
+     *
+     * @param code           异常代码
+     * @param args           异常参数
      * @param defaultMessage 默认异常消息
      */
     public BaseException(String code, Object[] args, String defaultMessage) {
-        this(code,args,defaultMessage,null);
+        this(code, args, defaultMessage, null);
     }
 
     /**
      * 构造基础异常
+     *
      * @param defaultMessage 默认异常消息
-     * @param cause 引起此异常的触发异常
+     * @param cause          引起此异常的触发异常
      */
     public BaseException(String defaultMessage, Throwable cause) {
         this(null, null, defaultMessage, cause);
@@ -73,16 +76,18 @@ public class BaseException extends RuntimeException {
 
     /**
      * 构造基础异常
+     *
      * @param defaultMessage 默认异常消息
      */
     public BaseException(String defaultMessage) {
         this(null, null, defaultMessage, null);
     }
+
     /**
-     *
      * 构造基础异常
-     * @param code 异常代码
-     * @param args 异常参数
+     *
+     * @param code  异常代码
+     * @param args  异常参数
      * @param cause 引起此异常的触发异常
      */
     public BaseException(String code, Object[] args, Throwable cause) {
@@ -90,8 +95,8 @@ public class BaseException extends RuntimeException {
     }
 
     /**
-     *
      * 构造基础异常
+     *
      * @param code 异常代码
      * @param args 异常参数
      */

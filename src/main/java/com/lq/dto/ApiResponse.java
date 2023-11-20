@@ -25,7 +25,7 @@ public class ApiResponse<T> implements Serializable {
 
     private String message;
 
-    private String Tag;
+    private String tag;
 
     private T data;
 }
