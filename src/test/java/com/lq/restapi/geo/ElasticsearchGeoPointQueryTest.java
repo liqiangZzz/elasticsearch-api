@@ -88,6 +88,7 @@ public class ElasticsearchGeoPointQueryTest {
                 resultList.add(geoPoint);
             }
         }
+
         resultList.forEach(System.out::println);
     }
 
